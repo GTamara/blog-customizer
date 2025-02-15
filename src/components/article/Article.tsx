@@ -1,20 +1,13 @@
-import clsx from 'clsx';
-
 // Сообщаем вебпаку, что этот файл использует это изображение.
 import plane from 'src/images/plane.png';
 import { Text } from 'src/ui/text';
 
 import s from './Article.module.scss';
+import clsx from 'clsx';
 
-type ArticleStateProps = {
-	panelStateHandler: () => void;
-};
-
-export const Article = (props: ArticleStateProps) => {
-	const { panelStateHandler } = props;
-
+export const Article = () => {
 	return (
-		<article className={clsx(s.article)} onClick={panelStateHandler}>
+		<article className={clsx(s.article)}>
 			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>

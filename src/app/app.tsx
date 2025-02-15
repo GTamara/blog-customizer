@@ -1,31 +1,19 @@
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import { Article } from 'src/components/article';
 import { ArticleParamsForm } from 'src/components/article-params-form';
 import '../styles/index.scss';
 import styles from '../styles/index.module.scss';
-import { defaultArticleState, OptionType } from 'src/constants/articleProps';
+import {
+	ArticleStateType,
+	defaultArticleState,
+} from 'src/constants/articleProps';
 import clsx from 'clsx';
 
 export const App = () => {
-	const [formState, setFormState] = useState(defaultArticleState);
 	const [articleState, setArticleState] = useState(defaultArticleState);
-	const [isPanelOpened, setPanelState] = useState(false);
 
-	useEffect(() => {
-		setArticleState(formState);
-	}, []);
-
-	const togglePanel = () => setPanelState((condition) => !condition);
-
-	const handleFormStateChange = (fieldName: string, value: OptionType) => {
-		setFormState({
-			...formState,
-			[fieldName]: value,
-		});
-	};
-
-	const applySettings = () => {
-		setArticleState(formState);
+	const applySettings = (state: ArticleStateType) => {
+		setArticleState(state);
 	};
 
 	return (
@@ -41,14 +29,11 @@ export const App = () => {
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				initialState={formState}
-				onFormStateChange={handleFormStateChange}
+				initialState={defaultArticleState}
 				onFormSunbit={applySettings}
-				resetForm={() => setFormState(articleState)}
-				isPanelOpened={isPanelOpened}
-				togglePanel={togglePanel}
+				resetForm={() => setArticleState(defaultArticleState)}
 			/>
-			<Article panelStateHandler={() => isPanelOpened && togglePanel()} />
+			<Article />
 		</main>
 	);
 };

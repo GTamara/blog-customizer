@@ -7,7 +7,6 @@ import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 import * as formData from 'src/constants/articleProps';
-import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 
 type ArticleParamsFormGrops = {
 	initialState: formData.ArticleStateType;
@@ -30,22 +29,25 @@ export const ArticleParamsForm = (
 		}
 	};
 
-	useOutsideClickClose({
-		isOpen: isPanelOpened,
-		rootRef: panelRef,
-		onClose: () => setPanelState(false),
-		onChange: setPanelState,
-	});
+	const handleClickOutsideThePanel = (event: MouseEvent) => {
+		const { target } = event;
+		if (target instanceof Node && !panelRef.current?.contains(target)) {
+			setPanelState(false);
+		}
+	};
 
 	useEffect(() => {
 		if (isPanelOpened) {
 			document.addEventListener('keydown', closePanelByEsc);
+			document.addEventListener('mousedown', handleClickOutsideThePanel);
 		} else {
 			document.removeEventListener('keydown', closePanelByEsc);
+			document.removeEventListener('mousedown', handleClickOutsideThePanel);
 		}
 
 		return () => {
 			document.removeEventListener('keydown', closePanelByEsc);
+			document.removeEventListener('mousedown', handleClickOutsideThePanel);
 		};
 	}, [isPanelOpened]);
 
@@ -65,14 +67,13 @@ export const ArticleParamsForm = (
 
 	const reset = () => {
 		resetForm();
-		setFormState(initialState);
+		setFormState(formData.defaultArticleState);
 	};
 
 	return (
-		<>
+		<div ref={panelRef}>
 			<ArrowButton isPanelOpened={isPanelOpened} onClick={togglePanel} />
 			<aside
-				ref={panelRef}
 				className={`${s.container}
 					${isPanelOpened ? s.container_open : ''}`}>
 				<form className={s.form} onSubmit={handleSubmit}>
@@ -131,6 +132,6 @@ export const ArticleParamsForm = (
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };

@@ -29,7 +29,7 @@ export const App = () => {
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				initialState={defaultArticleState}
+				initialState={articleState}
 				onFormSunbit={applySettings}
 				resetForm={() => setArticleState(defaultArticleState)}
 			/>
